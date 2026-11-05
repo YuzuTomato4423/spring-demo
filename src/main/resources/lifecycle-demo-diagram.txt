@@ -1,0 +1,21 @@
+
+=== SPR-1002-04 : Bean Lifecycle / code mapping ===
+依存Bean: [生成 constructor 01] -> [初期化 @PostConstruct 02]
+                         |
+                         v constructorの引数として注入
+[生成 + DI : LifecycleBean(resource)]               [LIFE 03]
+                         |
+                         v
+[初期化 : @PostConstruct initialize()]              [LIFE 04]
+                         |
+                         v
+[利用 : Runner -> use()]                            [LIFE 05]
+                         |
+                         v
+[終了 : ApplicationContext.close()]                 [LIFE 06]
+                         |
+                         v
+[破棄 : @PreDestroy release() -> 依存リソースclose]  [LIFE 07/08]
+補足: constructor injectionではBeanの生成とDIが一体になる。
+      DI完了後に初期化し、初期化完了後に利用する。
+

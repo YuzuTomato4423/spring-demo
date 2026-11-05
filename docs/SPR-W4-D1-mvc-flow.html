@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="ja"><meta charset="utf-8"><title>SPR-W4-D1-01 Spring MVCフロー</title>
+<style>body{font:16px/1.5 'Yu Gothic UI',sans-serif;background:#f5f7fa;color:#17233b;margin:24px}h1{font-size:26px}.flow{display:flex;align-items:stretch;gap:12px;margin:24px 0}.box{background:white;border:2px solid #2864a7;border-radius:8px;padding:14px;flex:1}h2{font-size:18px;margin:0 0 10px}.arrow{align-self:center;color:#2864a7;font-size:34px}.detail{padding:14px;background:white;border-left:6px solid #2864a7}code{font-family:Consolas,monospace}</style>
+<h1>SPR-W4-D1-01：HTTP RequestからResponseまで</h1>
+<div class="flow"><div class="box"><h2>HTTP Request</h2>ブラウザがHTTPメソッド・URL・queryを送信。<br><code>GET /employees/1</code></div><span class="arrow">→</span><div class="box"><h2>DispatcherServlet</h2>Spring MVCの入口。URLとメソッドからControllerを選び、処理を呼び出す。</div><span class="arrow">→</span><div class="box"><h2>Controller</h2>PathVariable / RequestParamをJava引数として受け取り、戻り値を返す。</div><span class="arrow">→</span><div class="box"><h2>HTTP Response</h2>ステータス・ヘッダー・本文をブラウザへ返す。<br>例：200 + JSON</div></div>
+<div class="detail"><b>呼び出しと変換</b><br>Tomcat → DispatcherServlet → HandlerMappingで選択 → HandlerAdapterで呼び出し。<br><code>@RestController</code>の戻り値は本文として扱い、HttpMessageConverterがStringやJSONへ変換する。<br><b>今回の確認：</b><code>/hello</code>、<code>/employees/{id}</code>、<code>/employees?department=xxx</code></div>
+</html>
+

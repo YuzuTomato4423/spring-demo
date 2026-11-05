@@ -1,0 +1,21 @@
+SPR-1007-04 : Lifecycle diagram / actual log mapping
+
+[01 生成 + constructor DI]
+          |
+          v   before-initialization chain
+[02 独自BPP.before] -> [03 @PostConstruct (CommonAnnotationBPP.before)]
+          |
+          v   before chain完了
+[04 InitializingBean.afterPropertiesSet]
+          |
+          v
+[05 独自BPP.after] -> [06 利用 use()]
+          |
+          v
+[07 Context.close] -> [08 @PreDestroy] -> [09 Context終了]
+
+図01/03/04/06/08: EmployeeLifecycleProbeのconstructor/callback/useに対応。
+図02/05: EmployeeBeanPostProcessor。図07/09: LauncherのContext終了処理。
+独自BPPはPriorityOrdered.HIGHEST_PRECEDENCEで図02を図03より先に実行する。
+@PostConstructもBPPのbeforeチェーン内で処理されるため、一般のBPP順序では
+独自beforeが常に@PostConstructより先とは限らない。破棄は初期化BPPとは別段階。

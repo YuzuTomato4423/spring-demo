@@ -1,0 +1,20 @@
+SPR-1007-03 : Spring Boot Auto Configuration 概念メモ
+
+1. 目的: 依存JAR、設定値、既存Beanなどの条件に基づいてBeanや設定を自動構成する。
+2. @SpringBootApplicationには自動設定の有効化とComponent Scanが含まれる。
+   Component Scanは自分の@Component等を探す処理。自動設定は条件付き設定を選ぶ処理。
+3. @ConditionalOnClass: 必要なクラスがclasspathに存在する場合に候補を有効化。
+4. @ConditionalOnProperty: プロパティの有無・値などで条件を判定。
+5. @ConditionalOnMissingBean: 指定のBeanが未定義なら既定Beanを用意する。
+   ユーザーが同じ役割のBeanを定義すると、その条件付き既定Beanは引き下がる。
+6. このプロジェクト: Spring Boot 4.1.1 / Java 17 / starter-webmvc。
+   EmployeeService等は自分で定義したBeanであり、Bootが業務ロジックを自動生成しない。
+7. debug=trueまたは--debugでCondition Evaluation Reportを確認できる。
+   Positive/Negative matchesは条件成立/不成立。Negativeだけで起動失敗とは判断しない。
+8. BeanPostProcessorとの接続:
+   自動設定などでBean定義が用意される -> 生成/DI -> 初期化前後のBPP -> 利用。
+   BPPは既存Beanの初期化段階に横断処理を挟む。自動設定の条件選択とは役割が異なる。
+
+公式資料: https://docs.spring.io/spring-boot/reference/using/auto-configuration.html
+条件: https://docs.spring.io/spring-boot/reference/features/developing-auto-configuration.html
+注: 課題03はメモ中心。この実行は概念メモの表示であり、条件実験の実測ではない。
