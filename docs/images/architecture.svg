@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 170" role="img" aria-labelledby="title">
+  <title id="title">Spring Demo request flow</title>
+  <rect width="860" height="170" rx="12" fill="#f1f5fa"/>
+  <g fill="#fff" stroke="#44769b" stroke-width="2">
+    <rect x="24" y="57" width="136" height="62" rx="10"/>
+    <rect x="192" y="57" width="144" height="62" rx="10"/>
+    <rect x="368" y="57" width="126" height="62" rx="10"/>
+    <rect x="526" y="57" width="146" height="62" rx="10"/>
+    <rect x="704" y="57" width="132" height="62" rx="10"/>
+  </g>
+  <g fill="#163450" font-family="Segoe UI, sans-serif" font-size="17" font-weight="600" text-anchor="middle">
+    <text x="430" y="32">Spring Demo · HTTP request flow</text>
+    <text x="92" y="94">HTTP Client</text>
+    <text x="264" y="94">Controller</text>
+    <text x="431" y="94">Service</text>
+    <text x="599" y="94">Repository</text>
+    <text x="770" y="94">H2</text>
+  </g>
+  <g fill="#44769b">
+    <path d="M164 86h16v-5l8 7-8 7v-5h-16z"/>
+    <path d="M340 86h16v-5l8 7-8 7v-5h-16z"/>
+    <path d="M498 86h16v-5l8 7-8 7v-5h-16z"/>
+    <path d="M676 86h16v-5l8 7-8 7v-5h-16z"/>
+  </g>
+</svg>
