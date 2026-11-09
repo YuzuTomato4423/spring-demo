@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 /**
  * SPR-W7-D2-04: 同じIDの登録→取得→更新→削除を実HTTPで通し、応答だけでなくcommit後の
  * DB内容もJDBCで確認する。モックでは見逃す配線・永続化・Transactionの回帰を検出する。
+ * SPR-W8-D1-04: リファクタリング後の全テストで、HTTP契約とコミット後のDB状態が維持されることを確認する。
  */
 @DisplayName("SPR-W7-D2-04 REST to DB CRUD")
 class Week7Day2RestDbTests extends Week7Day2IntegrationSupport {

@@ -3,6 +3,8 @@ package com.example.demo.exception;
 import java.util.Map;
 import java.util.TreeMap;
 
+import jakarta.validation.ConstraintViolationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -11,9 +13,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import com.example.demo.controller.Week5Day2EmployeeController;
 import com.example.demo.controller.Week4Day2EmployeeController;
 import com.example.demo.controller.Week4Day3EmployeeController;
+import com.example.demo.controller.Week5Day2EmployeeController;
+import com.example.demo.controller.Week6Day3EmployeeController;
 import com.example.demo.dto.ApiErrorResponse;
 
 /**
@@ -25,25 +28,29 @@ import com.example.demo.dto.ApiErrorResponse;
  */
 @RestControllerAdvice(assignableTypes = {
         Week4Day2EmployeeController.class, Week4Day3EmployeeController.class,
-        Week5Day2EmployeeController.class, com.example.demo.controller.Week6Day3EmployeeController.class})
+        Week5Day2EmployeeController.class, Week6Day3EmployeeController.class})
 public class EmployeeApiExceptionHandler {
+    private static final String VALIDATION_MESSAGE = "入力内容を確認してください。";
+
     // SPR-W6-D3-04: 入力形式/制約の不正は400。現在の保存状態と競合するメール重複は409。
     @ExceptionHandler(DuplicateEmployeeEmailException.class)
     public ResponseEntity<ApiErrorResponse> duplicateEmail(DuplicateEmployeeEmailException exception) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new ApiErrorResponse(409,exception.getMessage(),Map.of("email",exception.getMessage())));
+        String message = exception.getMessage();
+        return errorResponse(HttpStatus.CONFLICT, message, Map.of("email", message));
     }
     // SPR-W6-D3-04: 正のIDでも参照先部署が存在しなければ404。社員未存在と同じ分類にする。
     @ExceptionHandler(DepartmentNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> departmentNotFound(DepartmentNotFoundException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ApiErrorResponse(404,exception.getMessage(),Map.of("departmentId",exception.getMessage())));
+        String message = exception.getMessage();
+        return errorResponse(HttpStatus.NOT_FOUND, message, Map.of("departmentId", message));
     }
-    @ExceptionHandler(jakarta.validation.ConstraintViolationException.class)
-    public ResponseEntity<ApiErrorResponse> serviceValidation(jakarta.validation.ConstraintViolationException exception) {
-        Map<String,String> errors=new TreeMap<>();
-        exception.getConstraintViolations().forEach(error->errors.putIfAbsent(error.getPropertyPath().toString(),error.getMessage()));
-        return ResponseEntity.badRequest().body(new ApiErrorResponse(400,"入力内容を確認してください。",errors));
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiErrorResponse> serviceValidation(ConstraintViolationException exception) {
+        Map<String, String> errors = new TreeMap<>();
+        exception.getConstraintViolations().forEach(error ->
+                errors.putIfAbsent(error.getPropertyPath().toString(), error.getMessage()));
+        return errorResponse(HttpStatus.BAD_REQUEST, VALIDATION_MESSAGE, errors);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -51,31 +58,32 @@ public class EmployeeApiExceptionHandler {
         Map<String, String> errors = new TreeMap<>();
         exception.getBindingResult().getFieldErrors().forEach(error ->
                 errors.putIfAbsent(error.getField(), error.getDefaultMessage()));
-        return ResponseEntity.badRequest()
-                .body(new ApiErrorResponse(400, "入力内容を確認してください。", errors));
+        return errorResponse(HttpStatus.BAD_REQUEST, VALIDATION_MESSAGE, errors);
     }
 
     @ExceptionHandler(EmployeeNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> notFound(EmployeeNotFoundException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ApiErrorResponse(404, exception.getMessage(), Map.of()));
+        return errorResponse(HttpStatus.NOT_FOUND, exception.getMessage(), Map.of());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiErrorResponse> businessInput(IllegalArgumentException exception) {
-        return ResponseEntity.badRequest()
-                .body(new ApiErrorResponse(400, exception.getMessage(), Map.of()));
+        return errorResponse(HttpStatus.BAD_REQUEST, exception.getMessage(), Map.of());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiErrorResponse> unreadableBody() {
-        return ResponseEntity.badRequest()
-                .body(new ApiErrorResponse(400, "JSON形式のリクエスト本文を指定してください。", Map.of()));
+        return errorResponse(HttpStatus.BAD_REQUEST, "JSON形式のリクエスト本文を指定してください。", Map.of());
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ApiErrorResponse> invalidType() {
-        return ResponseEntity.badRequest()
-                .body(new ApiErrorResponse(400, "IDは整数で指定してください。", Map.of()));
+        return errorResponse(HttpStatus.BAD_REQUEST, "IDは整数で指定してください。", Map.of());
+    }
+
+    /** SPR-W8-D1-03: HTTPと本文が異なるエラーを示さないよう、同じステータスから応答を作る。 */
+    private static ResponseEntity<ApiErrorResponse> errorResponse(
+            HttpStatus status, String message, Map<String, String> errors) {
+        return ResponseEntity.status(status).body(new ApiErrorResponse(status.value(), message, errors));
     }
 }

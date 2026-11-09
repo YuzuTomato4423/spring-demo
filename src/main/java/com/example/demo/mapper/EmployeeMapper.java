@@ -4,12 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.dto.EmployeeRequest;
 import com.example.demo.dto.EmployeeResponse;
-import com.example.demo.model.Department;
 import com.example.demo.model.Employee;
 
-/** 受付・返却形式と業務モデルを分け、外部向けDTOへ内部構造を持ち込まない。 */
+/** SPR-W8-D1-02: 公開DTOへの変換を担当し、部署オブジェクトなどの内部構造を応答へ持ち込まない。 */
 @Component
 public class EmployeeMapper {
 
@@ -28,15 +26,4 @@ public class EmployeeMapper {
         );
     }
 
-    public Employee toEntity(
-            int id,
-            EmployeeRequest request,
-            Department department) {
-
-        return new Employee(
-                id,
-                request.name(),
-                department
-        );
-    }
 }

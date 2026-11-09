@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.EmployeeNotFoundException;
-import com.example.demo.model.Employee;
 import com.example.demo.model.Department;
+import com.example.demo.model.Employee;
 import com.example.demo.notification.EmployeeRegistrationNotifier;
 import com.example.demo.repository.EmployeeRepository;
 
@@ -17,6 +17,9 @@ import com.example.demo.repository.EmployeeRepository;
 public class EmployeeService {
 
     private static final Logger log = LoggerFactory.getLogger(EmployeeService.class);
+
+    private static final int DEVELOPMENT_DEPARTMENT_ID = 1;
+    private static final int SALES_DEPARTMENT_ID = 2;
 	
 	private int counter = 0;
 	
@@ -40,16 +43,19 @@ public class EmployeeService {
         return counter;
     }
 	
-	/** 保存に成功した社員だけを通知対象とし、入力不正を登録成功として伝えない。 */
-	public void register(Employee employee) {
+    /** SPR-W8-D1-01: 指定IDでの登録でも部署の判断をServiceに置き、保存はRepositoryへ委ねる。 */
+    public void register(int id, String name, int departmentId) {
+        Department department = resolveDepartment(departmentId);
+        register(new Employee(id, name, department));
+    }
 
-	    if (employee.getName() == null || employee.getName().isBlank()) {
-	        throw new IllegalArgumentException("社員名を入力してください。");
-	    }
-
-	    repository.save(employee);
-	    notifier.notifyRegistration(employee);
-	}
+    /** 保存に成功した社員だけを通知対象とし、入力不正を登録成功として伝えない。 */
+    public void register(Employee employee) {
+        // SPR-W8-D1-02: 登録・更新で氏名の判定とエラーメッセージがずれないよう共通化する。
+        validateName(employee.getName());
+        repository.save(employee);
+        notifier.notifyRegistration(employee);
+    }
 	
 	public List<Employee> findAll() {
 	    return repository.findAll();
@@ -109,8 +115,8 @@ public class EmployeeService {
 
     private static Department resolveDepartment(int departmentId) {
         return switch (departmentId) {
-            case 1 -> new Department(1, "開発部");
-            case 2 -> new Department(2, "営業部");
+            case DEVELOPMENT_DEPARTMENT_ID -> new Department(DEVELOPMENT_DEPARTMENT_ID, "開発部");
+            case SALES_DEPARTMENT_ID -> new Department(SALES_DEPARTMENT_ID, "営業部");
             default -> throw new IllegalArgumentException("存在しない部署です。");
         };
     }

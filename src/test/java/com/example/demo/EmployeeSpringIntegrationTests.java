@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.example.demo.controller.EmployeeController;
+import com.example.demo.controller.Week4Day2EmployeeController;
 import com.example.demo.dto.EmployeeRequest;
 import com.example.demo.exception.EmployeeNotFoundException;
 import com.example.demo.mapper.EmployeeMapper;
@@ -30,7 +31,9 @@ class EmployeeSpringIntegrationTests {
             assertEquals(1, context.getBeansOfType(type).size());
         }
         assertSame(service, ReflectionTestUtils.getField(controller, "service"));
-        assertSame(mapper, ReflectionTestUtils.getField(controller, "mapper"));
+        // SPR-W8-D1-01: 公開DTOを作るHTTPコントローラでMapperの配線を確認する。
+        var responseController = context.getBean(Week4Day2EmployeeController.class);
+        assertSame(mapper, ReflectionTestUtils.getField(responseController, "mapper"));
         assertSame(repository, ReflectionTestUtils.getField(service, "repository"));
         assertTrue(context.getBeansOfType(CarryDemoRunner.class).isEmpty());
     }
