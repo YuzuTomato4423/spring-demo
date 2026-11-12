@@ -1,0 +1,16 @@
+SPR-W8-D4-02 | Actual Maven output excerpt
+Command: .\mvnw.cmd -B clean package | Java 17
+
+[INFO] Tests run: 173, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+[INFO] Total time:  01:32 min
+[INFO] Finished at: 2026-11-12T13:22:52+09:00
+
+Week8Day3SecurityTests: 7 tests, 0 failures, 0 errors, 0 skipped
+userAndAdminCanReadEmployees
+sameUpdateReturns401ForAnonymous403ForUserAnd200ForAdmin
+onlyAdminCanCreateAndDeleteEmployees
+helloIsPublic
+adminCannotUpdateWithoutCsrfToken
+employeesRejectsIncorrectPassword
+adminCannotAccessUnlistedPaths
