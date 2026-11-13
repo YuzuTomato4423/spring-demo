@@ -134,7 +134,7 @@ Securityモード：SecurityFilterChainで認証・認可・CSRFを確認し、�
 .\mvnw.cmd "-Dtest=Week8Day3SecurityTests" test
 ```
 
-検証日時：**2026-11-12 13:22:52 JST**。Java 17、Maven Wrapperによる `clean package` は **BUILD SUCCESS**。全体 **173件、失敗0、エラー0、スキップ0**（Securityの7件を含む）。テスト用DB・起動ポートは各テストで分離しています。
+検証日時：**2026-11-13 10:01:58 JST**。Java 17、Maven Wrapperによる `clean package` は **BUILD SUCCESS**。全体 **173件、失敗0、エラー0、スキップ0**（Securityの7件を含む）。テスト用DB・起動ポートは各テストで分離しています。
 
 Securityの7件は、公開GET、不正パスワード、両ロールの参照、同一更新の401／403／200、CSRF不足、管理者だけの登録・削除、未許可パスの拒否を確認します。
 
@@ -144,7 +144,7 @@ Securityの7件は、公開GET、不正パスワード、両ロールの参照�
 
 ![JPAモードの社員登録201・取得200・入力不正400](docs/images/employee-api.png)
 
-今回のSecurity／JPAの実測は[API結果](docs/validation/w8d4-api-results.txt)、173件の成功は[テスト結果抜粋](docs/validation/w8d4-test-results.txt)を参照してください。[検証メモ](docs/SPR-W8-D4-validation.md)に証跡の取得状況を記載しています。今回の追加スクリーンショットは未取得です。
+今回のSecurity／JPAの実測は[API結果](docs/validation/w8d4-api-results.txt)、173件の成功は[テスト結果抜粋](docs/validation/w8d4-test-results.txt)を参照してください。[検証メモ](docs/SPR-W8-D4-validation.md)に証跡の取得状況を記載しています。Week8 Day4の追加スクリーンショットは未取得です。Day5の公開直前チェックと全テストの再実行結果は[公開確認記録](docs/SPR-W8-D5-publication.md)と[今回のテスト結果](docs/validation/w8d5-test-results.txt)を参照してください。
 
 ## 学習課題との対応
 
@@ -157,3 +157,12 @@ Securityの7件は、公開GET、不正パスワード、両ロールの参照�
 <!-- SPR-W8-D4-03: Public化直前の公開候補commit。公開設定の変更と最終Go/No-Goは次の課題で行う。 -->
 
 既存の課題メモは `docs/` に保持しています。
+
+## 公開前の最終確認
+
+<!-- SPR-W8-D5-01: 現在ファイルと公開対象のGit履歴に秘密情報・個人情報・実データが混入していないかを最終確認する。 -->
+<!-- SPR-W8-D5-02: README・画像・除外設定・全テストの確認結果を根拠にGo/No-Goを判断する。 -->
+
+2026-11-13、公開候補の現在ファイル316件と全6コミット（内容が異なるblob 324件）を点検しました。既知形式の秘密値、個人端末パス、実データの混入は見つかりませんでした。資格情報の候補25件は環境変数参照・空の学習用H2設定・実行時生成値などと確認しました。社員名・メールアドレスは架空データで、メールには `example.test` を使っています。
+
+Java 17で全173件のテストが成功し、失敗0・エラー0・スキップ0でした。READMEの参照先・公開用画像・設定例と `.gitignore` も点検し、公開前の判定は **Go** としました。[詳細と公開後の確認](docs/SPR-W8-D5-publication.md)を参照してください。
