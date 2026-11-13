@@ -22,8 +22,16 @@ target、IDE設定、logs、H2データ、.env、ローカル設定、秘密鍵�
 
 ## SPR-W8-D5-03：Public切替
 
-公開日時・未ログインでの表示確認結果は、切替後に追記する。
+公開日時：**2026-11-13 10:17:16 JST**（API変更完了時刻 `2026-11-13T10:17:16.921256+09:00`）。
+
+公開URL：<https://github.com/YuzuTomato4423/spring-demo>
+
+公開時commit：`2a8496050d9f599290e59fa659443071b8770fff`。mainのSHAとREADME・公開確認記録・テスト抜粋をGitHub APIで照合してからPublicへ変更した。
+
+認証ヘッダーもCookieも使わない第三者視点で、公開ページ、README、代表コード、設定例、テスト抜粋、PNG・SVGの8ファイルを取得。すべてHTTP 200で、ローカル内容とSHA-256が一致した。未ログインの画面でもPublic・ファイル一覧・READMEプレビューを確認した。
 
 ## SPR-W8-D5-04：公開後最終整理
 
-公開表示のREADME・画像・説明を確認し、必要な修正と最終commit/pushの結果を切替後に記録する。
+公開表示の確認後、READMEに公開リポジトリのclone／移動コマンドと公開日時・確認結果を追記した。この記録の未確定だった公開後欄も更新した。ソースコード・依存関係・認証設定の変更はない。
+
+今回の変更は通常commit/pushし、GitHubのmain・公開内容を再照合する。既存JUnit起動設定12ファイルのローカル変更は保持する。画面証跡はWindows標準Alt+Print Screenで取得し、Computer Useの観測画像は使用しない。
