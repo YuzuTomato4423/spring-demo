@@ -1,5 +1,6 @@
 SPR-W9-D1-01 | Actual Maven output excerpt
 Command: .\mvnw.cmd -B clean package | Java 17
+Source encoding: Maven platform MS932; excerpt decoded to UTF-8.
 
 [INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.56 s -- in com.example.demo.CarryDemoProfileTests
 [INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.127 s -- in com.example.demo.EmployeeMutationRepositoryTests
@@ -24,14 +25,14 @@ Command: .\mvnw.cmd -B clean package | Java 17
 [INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.754 s -- in com.example.demo.Week6Day2EagerTests
 [INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.595 s -- in com.example.demo.Week6Day2LazyTests
 [INFO] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.135 s -- in com.example.demo.Week6Day3BusinessTests
-[INFO] Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.747 s -- in SPR-W6-D4-02 �����E����Query Method
-[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.162 s -- in SPR-W6-D4-01 Repository save/find�ECRUD
-[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.455 s -- in SPR-W6-D4-04 Service�ُ�n�E���җ�O
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.046 s -- in SPR-W6-D4-03 Service����n
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.564 s -- in SPR-W6-D5-01 �i��DB�EAPI����
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.866 s -- in SPR-W7-D1-04 ��\CRUD��A PUT / DELETE
+[INFO] Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.747 s -- in SPR-W6-D4-02 氏名・部署Query Method
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.162 s -- in SPR-W6-D4-01 Repository save/find・CRUD
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.455 s -- in SPR-W6-D4-04 Service異常系・期待例外
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.046 s -- in SPR-W6-D4-03 Service正常系
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.564 s -- in SPR-W6-D5-01 永続DB・API統合
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.866 s -- in SPR-W7-D1-04 代表CRUD回帰 PUT / DELETE
 [INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.197 s -- in SPR-W7-D1-01 GET MockMvc
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.135 s -- in SPR-W7-D1-03 NotFound 404 / ����JSON
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.135 s -- in SPR-W7-D1-03 NotFound 404 / 共通JSON
 [INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.437 s -- in SPR-W7-D1-02 POST 201 / Validation 400
 [INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.934 s -- in SPR-W7-D2-01 SpringBootTest context
 [INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.221 s -- in SPR-W7-D2-03 DB Isolation
