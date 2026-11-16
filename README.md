@@ -12,6 +12,20 @@ cd spring-demo
 ```
 
 
+## 実行前の確認
+
+<!-- SPR-W9-D1-03: 第三者の実行環境を確認できるよう、Wrapperが実際に使うJavaとPowerShellの確認手順を追加する。 -->
+
+Windowsの実行例はJDK 17とPowerShell 7を使用します。clone先のルートで確認してください。
+
+```powershell
+java -version
+$PSVersionTable.PSVersion
+.\mvnw.cmd --version
+```
+
+`java` とMavenの表示がどちらもJava 17であることを確認します。異なる場合は、このPowerShellの `JAVA_HOME` と `PATH` を用意したJDK 17へ合わせてから実行してください。初回はWrapper本体と依存ライブラリの取得にネットワーク接続が必要です。まず後述の「ビルドと今回のテスト実績」のコマンドでビルド・テストを行い、その後に使用するモードを1つ選んで起動します。停止は起動したPowerShellで `Ctrl+C` です。
+
 ## 技術と実行モード
 
 | 技術 | 用途 |
@@ -125,6 +139,18 @@ JPAの登録・取得例：
 {"id":1,"name":"Sample Employee","email":"sample.employee@example.test","departmentName":"開発部"}
 ```
 
+### 設定例ファイルを使って起動する
+
+<!-- SPR-W9-D1-03: 設定例へのリンクだけでは適用手順が分からないため、ルート基準の実行コマンドを示す。 -->
+
+JPAモードの上記起動コマンドの代わりに、同じ設定の[設定例](docs/application-example.properties)を読み込む方法も使えます。他のサーバーを停止し、clone先のルートで実行してください。
+
+```powershell
+.\mvnw.cmd spring-boot:run "-Dspring-boot.run.arguments=--spring.config.additional-location=file:./docs/application-example.properties"
+```
+
+`127.0.0.1:8080` で `spr-w6-d3` が起動し、上記と同じ登録・取得・入力検証の例を実行できます。この設定例はJPA専用です。Securityモードでは前述の環境変数と起動手順を使用します。
+
 一覧・更新・削除・一括異動は[社員APIの課題メモ](docs/SPR-W6-D3-README.md)、DB分離は[統合テストの課題メモ](docs/SPR-W7-D2-README.md)、ポート設定は[設定例](docs/application-example.properties)を参照してください。
 
 ## 構成図
@@ -183,3 +209,10 @@ Java 17で全173件のテストが成功し、失敗0・エラー0・スキッ�
 <!-- SPR-W8-D5-04: 公開後の軽微修正として、clone手順と公開確認結果を追記する。 -->
 
 2026-11-13 10:17:16 JSTにPublicへ切り替えました。未ログインでREADME・ファイル一覧・コード・画像を確認済みです。公開後にclone手順と今回の公開確認結果を追記しました。[公開確認記録](docs/SPR-W8-D5-publication.md)に判定根拠と確認内容をまとめています。
+
+## 公開後の再現性確認
+
+<!-- SPR-W9-D1-01: Publicから新規cloneし、第三者がREADMEだけでbuild/run/testできることを確認する。 -->
+<!-- SPR-W9-D1-02: 公開後監査として、手順・画像リンク・設定例・不要/機密ファイルを再確認する。 -->
+
+2026-11-16、公開リポジトリを別フォルダへ認証情報なしでcloneし、Java 17で全173件とSecurity専用7件が成功しました。JPAの201・200・400、Securityの200・401・認証済み200もREADMEのPowerShell例で確認しました。環境確認・停止方法と設定例の適用コマンドを追記しています。[確認内容と修正理由](docs/SPR-W9-D1-reproducibility.md)を参照してください。

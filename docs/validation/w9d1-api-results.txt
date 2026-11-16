@@ -1,0 +1,18 @@
+SPR-W9-D1-01 | Actual README HTTP results (PowerShell 7)
+
+spr-w6-d3 | POST /employees | ANONYMOUS -> HTTP 201
+{"id":1,"name":"Sample Employee","email":"sample.employee@example.test","departmentName":"開発部"}
+spr-w6-d3 | GET /employees/1 | ANONYMOUS -> HTTP 200
+{"id":1,"name":"Sample Employee","email":"sample.employee@example.test","departmentName":"開発部"}
+spr-w6-d3 | POST /employees (empty name) | ANONYMOUS -> HTTP 400
+{"status":400,"message":"入力内容を確認してください。","errors":{"name":"社員名を入力してください。"}}
+spr-w8-d3 | GET /hello | ANONYMOUS -> HTTP 200
+Hello Spring!
+spr-w8-d3 | GET /employees | ANONYMOUS -> HTTP 401
+[]
+spr-w8-d3 | GET /employees | training-user -> HTTP 200
+[]
+spr-w8-d3 | GET /employees | training-admin -> HTTP 200
+[]
+
+Passwords and Authorization headers were not recorded.
