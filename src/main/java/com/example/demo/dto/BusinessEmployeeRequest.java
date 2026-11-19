@@ -5,6 +5,8 @@ import jakarta.validation.constraints.*;
 
 /** SPR-W6-D3-01: Day3だけの入力契約。過去課題のEmployeeRequestは変更しない。 */
 public record BusinessEmployeeRequest(
+        // SPR-W9-D4-02: spr-w6-d3系の登録・更新で、DBのNAME列を超える入力をHTTP 400で返す。
+        @Size(max=255, message="社員名は255文字以内で入力してください。")
         @NotBlank(message="社員名を入力してください。") String name,
         @NotBlank(message="メールを入力してください。")
         @Email(message="メール形式を確認してください。")

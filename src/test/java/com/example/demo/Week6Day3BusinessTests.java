@@ -81,6 +81,34 @@ class Week6Day3BusinessTests {
         error(send("POST","/employees",body(" ","valid@example.test",0)),400,"name");
         assertThat(rows()).isEmpty();
     }
+    // SPR-W9-D4-02: DBの氏名上限で登録・更新の成否が分かれ、拒否した要求で副作用が出ないことを確認する。
+    @Test void createEnforcesEmployeeNameLength() throws Exception {
+        String maxName = "名".repeat(255);
+        var created = send("POST", "/employees", body(maxName, "length-create@example.test", 1));
+        assertThat(created.statusCode()).as(created.body()).isEqualTo(201);
+        assertThat(tree(created).get("name").asText()).isEqualTo(maxName);
+
+        var before = rows();
+        int notifications = notifier.getDeliveryCount();
+        error(send("POST", "/employees", body(maxName + "名", "too-long@example.test", 2)), 400, "name");
+        assertThat(rows()).isEqualTo(before);
+        assertThat(notifier.getDeliveryCount()).isEqualTo(notifications);
+    }
+
+    @Test void updateEnforcesEmployeeNameLength() throws Exception {
+        long id = create("更新前", "length-update@example.test", 1);
+        String maxName = "名".repeat(255);
+        var updated = send("PUT", "/employees/" + id, body(maxName, "length-update@example.test", 2));
+        assertThat(updated.statusCode()).as(updated.body()).isEqualTo(200);
+        assertThat(tree(updated).get("name").asText()).isEqualTo(maxName);
+
+        var before = rows();
+        int notifications = notifier.getDeliveryCount();
+        error(send("PUT", "/employees/" + id, body(maxName + "名", "should-not-save@example.test", 1)), 400, "name");
+        assertThat(rows()).isEqualTo(before);
+        assertThat(notifier.getDeliveryCount()).isEqualTo(notifications);
+    }
+
     @Test void malformedJsonAndMissingEmployeesUseSameErrorContract() throws Exception {
         error(send("POST","/employees","{"),400,null);
         error(send("GET","/employees/not-a-number",null),400,null);
@@ -103,6 +131,35 @@ class Week6Day3BusinessTests {
         }
         assertThat(jdbc.queryForList("SELECT * FROM DEPARTMENT ORDER BY ID")).isEqualTo(departments);
     }
+    // SPR-W9-D4-03: メール必須化前の社員も、既存の氏名とNULLメールを保って一括異動できることを確認する。
+    @Test void transferPreservesLegacyNullEmailAlongsideRegisteredEmail() throws Exception {
+        String legacyName = "メール未登録の旧社員";
+        jdbc.update("INSERT INTO EMPLOYEE(NAME, EMAIL, DEPARTMENT_ID) VALUES (?, NULL, ?)", legacyName, 1);
+        long legacyId = jdbc.queryForObject("SELECT ID FROM EMPLOYEE WHERE NAME = ?", Long.class, legacyName);
+        long registeredId = create("メール登録済み社員", "registered@example.test", 1);
+        var before = rows();
+
+        var response = send("POST", "/employees/transfers", transfer(List.of(registeredId, legacyId), 2));
+        assertThat(response.statusCode()).as(response.body()).isEqualTo(200);
+        var result = tree(response);
+        assertThat(result.get("updatedCount").asInt()).isEqualTo(2);
+        var transferred = result.get("employees");
+        assertThat(transferred.size()).isEqualTo(2);
+        assertThat(transferred.get(0).get("id").asLong()).isEqualTo(registeredId);
+        assertThat(transferred.get(1).get("id").asLong()).isEqualTo(legacyId);
+
+        var after = rows();
+        assertThat(after).hasSize(2);
+        for (int index = 0; index < before.size(); index++) {
+            var previous = before.get(index);
+            var saved = after.get(index);
+            assertThat(saved.get("ID")).isEqualTo(previous.get("ID"));
+            assertThat(saved.get("NAME")).isEqualTo(previous.get("NAME"));
+            assertThat(saved.get("EMAIL")).isEqualTo(previous.get("EMAIL"));
+            assertThat(saved.get("DEPARTMENT_ID")).isEqualTo(2);
+        }
+    }
+
     @Test void laterFailureRollsBackAlreadyFlushedFirstUpdate(CapturedOutput output) throws Exception {
         long a=create("戻るA","rollback-a@example.test",1),b=create("戻るB","rollback-b@example.test",1);
         var before=rows();
