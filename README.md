@@ -2,6 +2,20 @@
 
 Spring Bootで社員・部署管理のREST APIを作る学習プロジェクトです。Controller・Service・Repositoryの分離、入力検証、トランザクション、認証・認可をプロファイルごとに確認できます。
 
+## CI（GitHub Actions）
+
+[![Maven CI](https://github.com/YuzuTomato4423/spring-demo/actions/workflows/maven-ci.yml/badge.svg?branch=main&event=push)](https://github.com/YuzuTomato4423/spring-demo/actions/workflows/maven-ci.yml)
+
+ブランチへの push と `main` 宛てのプルリクエストでCIが起動します。GitHub上のUbuntuで、Temurin JDK 17とMaven Wrapperを使い、`bash ./mvnw -B clean test` で全テストを実行します。
+
+結果を確認するには、バッジをクリックして対象コミットの実行を開き、`Java 17 tests` の `Run Maven tests` のログを見てください。
+
+Windowsで再現するには、JDK 17を設定し、プロジェクトのルートで次を実行してください。
+
+```powershell
+.\mvnw.cmd -B clean test
+```
+
 ## 入手方法
 
 公開リポジトリをcloneし、プロジェクトのルートへ移動してから、下記のビルド・起動手順を実行してください。
